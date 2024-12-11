@@ -5,22 +5,29 @@ import { useDispatch, useSelector } from "react-redux";
 function App() {
   const dispatch = useDispatch();
   const cash = useSelector( (state) => state.cash.cash)
-  const customers = useSelector (state => state.customers.customers)
   
-  const addCash = ({cash}) => {
-    dispatch({type:"ADD_CASH", payload: cash})
+  const customers = useSelector( (state) => state.customers.customers)
+  
+  const addCash = (cash) => {
+    dispatch({type:'add', payload: cash})
   }
 
-  const getCash = ({cash}) => {
+  const getCash = (cash) => {
     dispatch({type:"GET_CASH", payload: cash})
   }
 
   const addCustomer = (name) => {
+    console.log(name);
+    
     const customer = {
-      name,
+      name: name,
       id:Date.now(),
     }
-    dispatch({type: "ADD_Customer", payload: customer})
+    dispatch({type: "ADD_CUSTOMER", payload: customer})
+  }
+
+  const removeCustomer = (name) => {
+
   }
 
   return (
@@ -30,12 +37,13 @@ function App() {
         <button onClick={()=> addCash(Number(prompt()))}>Пополнить счет</button>
         <button onClick={()=> getCash(Number(prompt()))}>Снять со счета</button>
         <button onClick={()=> addCustomer(prompt())}>Добавить клиента</button>
-        <button onClick={()=> getCash(Number(prompt()))}>Убрать клиента</button>
+        <button onClick={()=> removeCustomer(Number(prompt()))}>Убрать клиента</button>
       </div>
-      {customers.length > 0?
+      {customers.length > 0 
+      ?
       <div>
-        {customers.map(customer =>
-        <div>{customer.name}</div>
+        {customers?.map(customer =>
+        <div>{customer?.name}</div>
         )}
       </div>
       :

@@ -1,13 +1,15 @@
 const defaultState = {
-    customers: []
+    customers:[]
 }
 
 
 
 export const customerReducer = (state = defaultState, action)=> {
+  console.log(action);
+  
     switch (action.type) {
       case "ADD_CUSTOMER":
-        return {...state, customers: [...state.customers, action.payload.customers]}
+        return {...state, customers: [...state.customers, action.payload]}
       case "REMOVE_CUSTOMER":
         return {...state, cash: state.cash - action.payload}
       default:
