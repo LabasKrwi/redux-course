@@ -1,6 +1,8 @@
 import React from "react";
 import './App.css';
 import { useDispatch, useSelector } from "react-redux";
+import { addCustomerAction, removeCustomerAction } from "./store/customerReducer";
+import { fetchCustomers } from "./asyncAction/customers";
 
 function App() {
   const dispatch = useDispatch();
@@ -9,7 +11,7 @@ function App() {
   const customers = useSelector( (state) => state.customers.customers)
   
   const addCash = (cash) => {
-    dispatch({type:'add', payload: cash})
+    dispatch({type:'ADD_CASH', payload: cash})
   }
 
   const getCash = (cash) => {
@@ -17,37 +19,35 @@ function App() {
   }
 
   const addCustomer = (name) => {
-    console.log(name);
-    
     const customer = {
       name: name,
       id:Date.now(),
     }
-    dispatch({type: "ADD_CUSTOMER", payload: customer})
+    dispatch(addCustomerAction(customer))
   }
 
-  const removeCustomer = (name) => {
-
+  const removeCustomer = (customer) => {
+    dispatch(removeCustomerAction(customer.id))
   }
 
   return (
     <div className="App">
-      <div style={{fontSize: '30px'}}>{cash}</div>
+      <div style={{textAlign: 'center', fontSize: "2rem"}}>Баланс: {cash}</div>
       <div style={{display: "flex"}}>
         <button onClick={()=> addCash(Number(prompt()))}>Пополнить счет</button>
         <button onClick={()=> getCash(Number(prompt()))}>Снять со счета</button>
         <button onClick={()=> addCustomer(prompt())}>Добавить клиента</button>
-        <button onClick={()=> removeCustomer(Number(prompt()))}>Убрать клиента</button>
+        <button onClick={()=> dispatch(fetchCustomers())}>Получить клиентов из базы</button>
       </div>
       {customers.length > 0 
       ?
       <div>
         {customers?.map(customer =>
-        <div>{customer?.name}</div>
+        <div className="cusList" onClick={() => removeCustomer(customer)} >{customer?.name}</div>
         )}
       </div>
       :
-      <div style={{fontSize: '3rem', marginTop:'20px'}}>
+      <div style={{fontSize: '3rem', marginTop:'20px', textAlign:'center'}}>
         Клиенты отсутствуют
       </div>
       }
